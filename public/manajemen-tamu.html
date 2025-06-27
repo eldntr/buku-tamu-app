@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Tamu - Sistem Buku Tamu</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-content">
+        <h1>Manajemen Data Tamu</h1>
+        <p>Di sini Anda bisa mengedit atau menghapus data tamu yang sudah masuk.</p>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Instansi</th>
+                        <th>Tujuan</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="guest-table-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Edit Data Tamu</h2>
+            <form id="editForm">
+                <input type="hidden" id="edit-guestId">
+                <div class="form-group"><label for="edit-name">Nama:</label><input type="text" id="edit-name"></div>
+                <div class="form-group"><label for="edit-organization">Instansi:</label><input type="text" id="edit-organization"></div>
+                <div class="form-group"><label for="edit-destination">Tujuan:</label><input type="text" id="edit-destination"></div>
+                <div class="form-group"><label for="edit-purpose">Keperluan:</label><textarea id="edit-purpose" rows="2"></textarea></div>
+                <div class="form-group"><label for="edit-phone">No. Telp:</label><input type="tel" id="edit-phone"></div>
+                <div class="form-group">
+                    <label for="edit-category">Kategori:</label>
+                    <select id="edit-category">
+                        <option value="Pribadi">Pribadi</option><option value="Bisnis">Bisnis</option><option value="Pemerintahan">Pemerintahan</option><option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                <div class="form-group"><label for="edit-satisfactionRating">Rating:</label><input type="number" id="edit-satisfactionRating" min="1" max="5"></div>
+                <button type="submit">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/manajemen-tamu.js"></script>
+</body>
+</html>
