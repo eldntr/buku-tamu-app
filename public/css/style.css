@@ -16,28 +16,19 @@ body {
     margin: 0;
 }
 
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-section {
-    padding: 40px 0;
-    border-bottom: 1px solid #ddd;
-}
-
 h1, h2, h3 {
     color: var(--primary-color);
     margin-bottom: 20px;
 }
 
-h2 {
-    text-align: center;
-    font-size: 2.2rem;
+/* --- Layout Utama untuk SEMUA Halaman --- */
+.container, .main-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-/* --- Hero Section --- */
+/* --- Hero Section (Hanya untuk index.html) --- */
 .hero-section {
     position: relative;
     height: 60vh;
@@ -52,15 +43,11 @@ h2 {
 }
 .hero-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
 }
 .hero-content {
-    position: relative;
-    z-index: 2;
+    position: relative; z-index: 2;
 }
 .hero-content h1 {
     font-size: 3rem;
@@ -68,7 +55,13 @@ h2 {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
 }
 
-/* --- Profil Section --- */
+/* --- Card & Section (Untuk index.html & Halaman Admin) --- */
+section {
+    padding: 40px 0;
+}
+.profil-section, .peta-section, .buku-tamu-section {
+    border-bottom: 1px solid #ddd;
+}
 .profil-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -79,69 +72,66 @@ h2 {
     padding: 25px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease;
 }
-.profil-card:hover {
-    transform: translateY(-5px);
-}
-.profil-card ul {
-    list-style-type: '✓  ';
-    padding-left: 20px;
-}
+.profil-card ul { list-style-type: '✓  '; padding-left: 20px; }
+.peta-img { max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
-/* --- Peta Section --- */
-.peta-section {
-    text-align: center;
-}
-.peta-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-/* --- Form & Buku Tamu Section --- */
-.form-card {
-    background: #f9f9f9; padding: 30px; border-radius: 8px; margin: 0 auto; max-width: 700px; border: 1px solid #ddd;
-}
+/* --- Form (Untuk index.html & Modal Admin) --- */
+.form-card { background: #f9f9f9; padding: 30px; border-radius: 8px; margin: 0 auto; max-width: 700px; border: 1px solid #ddd; }
 .form-group { margin-bottom: 15px; }
 label { display: block; margin-bottom: 5px; font-weight: 600; }
-input[type="text"], input[type="tel"], textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: var(--font-family); }
-button[type="submit"] { display: block; width: 100%; background-color: var(--secondary-color); color: white; padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; transition: background-color 0.3s; }
+input[type="text"], input[type="tel"], input[type="number"], textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: var(--font-family); }
+button { cursor: pointer; transition: background-color 0.3s; }
+button[type="submit"] { display: block; width: 100%; background-color: var(--secondary-color); color: white; padding: 15px; border: none; border-radius: 4px; font-size: 16px; font-weight: 600; }
 button[type="submit"]:hover { background-color: var(--primary-color); }
 .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
 .star-rating input[type="radio"] { display: none; }
-.star-rating label { font-size: 2.5rem; color: #ccc; cursor: pointer; padding: 0 5px; transition: color 0.2s; }
+.star-rating label { font-size: 2.5rem; color: #ccc; cursor: pointer; padding: 0 5px; }
 .star-rating input[type="radio"]:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #f5b301; }
 
-/* --- Footer --- */
-.footer {
-    background-color: var(--dark-color);
-    color: var(--white-color);
-    text-align: center;
-    padding: 20px;
-}
-.admin-login-link {
-    color: #aaa;
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-.admin-login-link:hover {
-    color: var(--white-color);
-}
-
-/* --- Tampilan Mobile Friendly (Responsive) --- */
-@media (min-width: 768px) {
-    .profil-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    .hero-content h1 {
-        font-size: 4rem;
-    }
-}
-
-/* Styles untuk halaman admin yang sudah ada (jika perlu) */
-nav { background-color: #0056b3; padding: 1rem; display: flex; justify-content: center; gap: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 5px; transition: background-color 0.3s; }
+/* --- Navbar Admin --- */
+nav { background-color: #0056b3; padding: 1rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 5px; }
 nav a:hover, .nav-active { background-color: #007bff; }
-.main-content { padding: 20px; }
+
+/* --- Tabel Manajemen (PENTING UNTUK FIX TAMPILAN) --- */
+.table-container {
+    overflow-x: auto; /* Ini membuat tabel bisa di-scroll ke samping di layar kecil */
+    background: var(--white-color);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px; /* Lebar minimal tabel agar tidak aneh saat datanya banyak */
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: middle;
+}
+th { background-color: #f2f2f2; font-weight: 600; }
+td.actions { white-space: nowrap; width: 1%; } /* Mencegah tombol turun baris */
+td.actions button { font-size: 12px; padding: 5px 10px; margin-right: 5px; border: none; border-radius: 4px; color: white; }
+button.edit-btn { background-color: #ffc107; color: #212529; }
+button.delete-btn { background-color: #dc3545; }
+
+/* --- Modal Admin --- */
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
+.modal-content { background-color: #fefefe; margin: 10% auto; padding: 25px; border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 8px; position: relative; }
+.close-button { color: #aaa; float: right; font-size: 28px; font-weight: bold; position: absolute; top: 10px; right: 20px; }
+.close-button:hover, .close-button:focus { color: black; text-decoration: none; cursor: pointer; }
+
+/* --- Footer --- */
+.footer { background-color: var(--dark-color); color: var(--white-color); text-align: center; padding: 20px; margin-top: 40px; }
+.admin-login-link { color: #aaa; text-decoration: none; font-size: 0.9rem; }
+.admin-login-link:hover { color: var(--white-color); }
+
+/* --- Aturan Responsive --- */
+@media (min-width: 768px) {
+    .profil-grid { grid-template-columns: repeat(3, 1fr); }
+    .hero-content h1 { font-size: 4rem; }
+}

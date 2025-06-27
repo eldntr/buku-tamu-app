@@ -13,19 +13,24 @@ document.addEventListener("DOMContentLoaded", () => {
             guests.forEach(guest => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${guest.name || '-'}</td>
-                    <td>${guest.organization || '-'}</td>
-                    <td>${guest.destination || '-'}</td>
-                    <td>${new Date(guest.createdAt).toLocaleDateString('id-ID')}</td>
                     <td class="actions">
                         <button class="edit-btn" data-id="${guest.id}">Edit</button>
                         <button class="delete-btn" data-id="${guest.id}">Hapus</button>
                     </td>
+                    <td>${guest.name || '-'}</td>
+                    <td>${guest.organization || '-'}</td>
+                    <td>${guest.category || '-'}</td>
+                    <td>${guest.satisfactionRating ? guest.satisfactionRating + ' ★' : '-'}</td>
+                    <td>${guest.phone || '-'}</td>
+                    <td>${guest.destination || '-'}</td>
+                    <td>${guest.purpose || '-'}</td>
+                    <td>${new Date(guest.createdAt).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' })}</td>
                 `;
                 tableBody.appendChild(row);
-            });
+});
         } catch (error) {
             console.error('Gagal memuat data tamu:', error);
+            tableBody.innerHTML = `<tr><td colspan="9" style="text-align:center;color:red;">Gagal memuat data. Coba login kembali.</td></tr>`;
         }
     };
 

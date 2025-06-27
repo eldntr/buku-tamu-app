@@ -9,16 +9,20 @@
 <body>
     <div class="main-content">
         <h1>Manajemen Data Tamu</h1>
-        <p>Di sini Anda bisa mengedit atau menghapus data tamu yang sudah masuk.</p>
+        <p>Di sini Anda bisa mengedit atau menghapus data tamu yang sudah masuk. Pada layar kecil, tabel dapat digeser ke samping.</p>
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
+                        <th>Aksi</th>
                         <th>Nama</th>
                         <th>Instansi</th>
+                        <th>Kategori</th>
+                        <th>Rating</th>
+                        <th>No. Telp</th>
                         <th>Tujuan</th>
+                        <th>Keperluan</th>
                         <th>Tanggal</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="guest-table-body">
@@ -44,13 +48,14 @@
                         <option value="Pribadi">Pribadi</option><option value="Bisnis">Bisnis</option><option value="Pemerintahan">Pemerintahan</option><option value="Lainnya">Lainnya</option>
                     </select>
                 </div>
-                <div class="form-group"><label for="edit-satisfactionRating">Rating:</label><input type="number" id="edit-satisfactionRating" min="1" max="5"></div>
+                <div class="form-group"><label for="edit-satisfactionRating">Rating (1-5):</label><input type="number" id="edit-satisfactionRating" min="1" max="5"></div>
                 <button type="submit">Simpan Perubahan</button>
             </form>
         </div>
     </div>
 
-    <script src="js/api-helper.js"></script> <script src="js/main.js"></script>
+    <script src="js/api-helper.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/manajemen-tamu.js"></script>
 </body>
 </html>
