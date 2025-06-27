@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalGuestsEl = document.getElementById('total-guests');
     const ctx = document.getElementById('visitsChart').getContext('2d');
 
-    fetch('/api/stats/summary')
+    fetch('/api/admin/stats/summary')
         .then(response => response.json())
         .then(data => {
             // Tampilkan total tamu

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const ctx = document.getElementById('satisfactionChart').getContext('2d');
 
-    fetch('/api/stats/satisfaction')
+    fetch('/api/admin/stats/satisfaction')
         .then(response => response.json())
         .then(data => {
             const labels = ['Buruk (1★)', 'Kurang (2★)', 'Cukup (3★)', 'Baik (4★)', 'Luar Biasa (5★)'];

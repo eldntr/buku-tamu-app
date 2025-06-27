@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const categoryListEl = document.getElementById('category-list');
 
-    fetch('/api/guests')
+    fetch('/api/admin/guests')
         .then(response => response.json())
         .then(guests => {
             // Kelompokkan tamu berdasarkan kategori
