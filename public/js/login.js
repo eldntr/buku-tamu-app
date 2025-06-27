@@ -21,8 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (response.ok) {
                 // Simpan token ke localStorage
                 localStorage.setItem('authToken', data.accessToken);
-                // Redirect ke dashboard
-                window.location.href = '/index.html';
+                
+                // PENTING: Pastikan redirect ke dashboard.html
+                window.location.href = '/dashboard.html'; 
+
             } else {
                 errorMessage.textContent = data.message || 'Login gagal.';
             }
