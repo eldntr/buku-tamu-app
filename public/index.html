@@ -3,53 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang di Sistem Buku Tamu</title>
+    <title>Profil RW 04 Dukuh Menanggal - Surabaya</title>
     <link rel="stylesheet" href="css/style.css">
-    <style>
-        .landing-container {
-            text-align: center;
-            padding: 50px 20px;
-        }
-        .landing-container h1 {
-            font-size: 2.5rem;
-            color: #0056b3;
-        }
-        .landing-container p {
-            font-size: 1.2rem;
-            color: #555;
-            margin-bottom: 40px;
-        }
-        .action-buttons a {
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            margin: 0 10px;
-            transition: background-color 0.3s;
-        }
-        .action-buttons a.admin-login {
-            background-color: #6c757d;
-        }
-        .action-buttons a:hover {
-            background-color: #0056b3;
-        }
-        .action-buttons a.admin-login:hover {
-            background-color: #5a6268;
-        }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main-content">
-        <div class="landing-container">
-            <h1>Selamat Datang</h1>
-            <p>Sistem pencatatan tamu digital modern dan efisien.</p>
-            <div class="action-buttons">
-                <a href="buku-tamu.html">Isi Buku Tamu</a>
-                <a href="login.html" class="admin-login">Login Admin</a>
-            </div>
+
+    <header class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1>Selamat Datang di Lingkungan RW 04</h1>
+            <p>Kelurahan Dukuh Menanggal, Kecamatan Gayungan, Kota Surabaya</p>
         </div>
-    </div>
+    </header>
+
+    <main class="container">
+        <section id="profil" class="profil-section">
+            <h2>Profil Kampung</h2>
+            <div class="profil-grid">
+                <article class="profil-card">
+                    <h3>Tentang Wilayah</h3>
+                    <p>RW 04 Kelurahan Dukuh Menanggal, dengan luas wilayah <strong>+ 32.853 m²</strong>, terletak pada garis Lintang -7.348262 dan garis Bujur 112.726012.</p>
+                    <p>Area kami terdiri dari beragam kawasan yang hidup dan dinamis.</p>
+                </article>
+                <article class="profil-card">
+                    <h3>Fasilitas & Kawasan</h3>
+                    <ul>
+                        <li>Kawasan pemukiman padat penduduk</li>
+                        <li>Taman Bacaan Masyarakat (TBM) di balai RW 04</li>
+                        <li>Kawasan Perdagangan (Ruko di RT 3)</li>
+                        <li>Musholla Al Ma’aariij (Kapasitas 100 orang)</li>
+                        <li>Wilayah perbatasan kota Surabaya & Sidoarjo</li>
+                    </ul>
+                </article>
+                <article class="profil-card">
+                    <h3>Batas Administratif</h3>
+                    <ul>
+                        <li><strong>Utara:</strong> Jalan Tol Surabaya – Mojokerto</li>
+                        <li><strong>Timur:</strong> Jl. Ahmad Yani Surabaya</li>
+                        <li><strong>Selatan:</strong> Desa Bungurasih Waru Sidoarjo</li>
+                        <li><strong>Barat:</strong> Desa Bungurasih Waru Sidoarjo</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <section id="peta" class="peta-section">
+            <h2>Peta Wilayah RW 04</h2>
+            <img src="assets/peta-rw04.jpg" alt="Peta Wilayah RW 04 Dukuh Menanggal" class="peta-img">
+        </section>
+
+        <section id="buku-tamu" class="buku-tamu-section">
+            <h2>Buku Tamu</h2>
+            <p>Silakan isi form di bawah ini untuk mencatatkan kunjungan Anda.</p>
+            <div class="form-card">
+                <form id="guestForm">
+                    <div class="form-group"><label for="name">Nama:</label><input type="text" id="name"></div>
+                    <div class="form-group"><label for="organization">Instansi/Organisasi:</label><input type="text" id="organization"></div>
+                    <div class="form-group"><label for="destination">Tujuan (Bertemu Siapa):</label><input type="text" id="destination"></div>
+                    <div class="form-group"><label for="purpose">Keperluan:</label><textarea id="purpose" rows="3"></textarea></div>
+                    <div class="form-group"><label for="phone">No. Telepon:</label><input type="tel" id="phone"></div>
+                    <div class="form-group">
+                        <label for="category">Kategori Tamu:</label>
+                        <select id="category"><option value="">-- Pilih Kategori --</option><option value="Pribadi">Pribadi</option><option value="Bisnis">Bisnis</option><option value="Pemerintahan">Pemerintahan</option><option value="Lainnya">Lainnya</option></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Penilaian Kepuasan Layanan:</label>
+                        <div class="star-rating">
+                            <input type="radio" id="star5" name="rating" value="5" /><label for="star5" title="Luar Biasa">★</label>
+                            <input type="radio" id="star4" name="rating" value="4" /><label for="star4" title="Baik">★</label>
+                            <input type="radio" id="star3" name="rating" value="3" /><label for="star3" title="Cukup">★</label>
+                            <input type="radio" id="star2" name="rating" value="2" /><label for="star2" title="Kurang">★</label>
+                            <input type="radio" id="star1" name="rating" value="1" /><label for="star1" title="Buruk">★</label>
+                        </div>
+                    </div>
+                    <button type="submit">Kirim Data Kunjungan</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 RW 04 Dukuh Menanggal. All rights reserved.</p>
+        <p><a href="login.html" class="admin-login-link">Login Admin</a></p>
+    </footer>
+
+    <script src="js/index.js"></script>
 </body>
 </html>

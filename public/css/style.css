@@ -1,111 +1,147 @@
-/* (Tambahkan ke style.css yang sudah ada) */
+/* --- Reset & Variabel Global --- */
+:root {
+    --primary-color: #0056b3;
+    --secondary-color: #007bff;
+    --dark-color: #333;
+    --light-color: #f4f7f6;
+    --white-color: #fff;
+    --font-family: 'Poppins', sans-serif;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background-color: #f4f7f6;
-    color: #333;
+    font-family: var(--font-family);
+    background-color: var(--light-color);
+    color: var(--dark-color);
+    line-height: 1.7;
     margin: 0;
 }
 
-nav {
-    background-color: #0056b3;
-    padding: 1rem;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 15px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-nav a:hover, .nav-active {
-    background-color: #007bff;
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
-.main-content {
-    max-width: 1000px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
+section {
+    padding: 40px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+h1, h2, h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2.2rem;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    position: relative;
+    height: 60vh;
+    background-image: url('../assets/foto-warga.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--white-color);
+}
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+.hero-content h1 {
+    font-size: 3rem;
+    color: var(--white-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+}
+
+/* --- Profil Section --- */
+.profil-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+.profil-card {
+    background: var(--white-color);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+}
+.profil-card:hover {
+    transform: translateY(-5px);
+}
+.profil-card ul {
+    list-style-type: '✓  ';
+    padding-left: 20px;
+}
+
+/* --- Peta Section --- */
+.peta-section {
+    text-align: center;
+}
+.peta-img {
+    max-width: 100%;
+    height: auto;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
-    color: #0056b3;
-}
-
-.chart-container {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.stats-card {
-    background-color: #e9f5ff;
-    border-left: 5px solid #007bff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-}
-
-.stats-card h3 {
-    margin: 0;
-    color: #0056b3;
-}
-
-.stats-card p {
-    font-size: 2rem;
-    font-weight: bold;
-    margin: 5px 0 0;
-}
-
-/* Form Styles */
+/* --- Form & Buku Tamu Section --- */
 .form-card {
-    background: #f9f9f9; padding: 20px; border-radius: 8px; margin-bottom: 25px; border: 1px solid #ddd;
+    background: #f9f9f9; padding: 30px; border-radius: 8px; margin: 0 auto; max-width: 700px; border: 1px solid #ddd;
 }
 .form-group { margin-bottom: 15px; }
-label { display: block; margin-bottom: 5px; font-weight: bold; }
-input[type="text"], input[type="tel"], textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-button { background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; margin-right: 10px; }
-button:hover { background-color: #0056b3; }
-
-/* Star Rating */
+label { display: block; margin-bottom: 5px; font-weight: 600; }
+input[type="text"], input[type="tel"], textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: var(--font-family); }
+button[type="submit"] { display: block; width: 100%; background-color: var(--secondary-color); color: white; padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; transition: background-color 0.3s; }
+button[type="submit"]:hover { background-color: var(--primary-color); }
 .star-rating { display: flex; flex-direction: row-reverse; justify-content: flex-end; }
 .star-rating input[type="radio"] { display: none; }
-.star-rating label { font-size: 2rem; color: #ccc; cursor: pointer; padding: 0 5px; }
-.star-rating input[type="radio"]:checked ~ label,
-.star-rating label:hover,
-.star-rating label:hover ~ label { color: #f5b301; }
+.star-rating label { font-size: 2.5rem; color: #ccc; cursor: pointer; padding: 0 5px; transition: color 0.2s; }
+.star-rating input[type="radio"]:checked ~ label, .star-rating label:hover, .star-rating label:hover ~ label { color: #f5b301; }
 
-/* Styles for Table */
-.table-container { overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-th { background-color: #f2f2f2; }
-td.actions button { font-size: 12px; padding: 5px 8px; margin-right: 5px; }
-button.edit-btn { background-color: #ffc107; color: #212529; }
-button.delete-btn { background-color: #dc3545; }
+/* --- Footer --- */
+.footer {
+    background-color: var(--dark-color);
+    color: var(--white-color);
+    text-align: center;
+    padding: 20px;
+}
+.admin-login-link {
+    color: #aaa;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.admin-login-link:hover {
+    color: var(--white-color);
+}
 
-/* Styles for Modal */
-.modal {
-    display: none; position: fixed; z-index: 1000; left: 0; top: 0;
-    width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);
+/* --- Tampilan Mobile Friendly (Responsive) --- */
+@media (min-width: 768px) {
+    .profil-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .hero-content h1 {
+        font-size: 4rem;
+    }
 }
-.modal-content {
-    background-color: #fefefe; margin: 10% auto; padding: 25px;
-    border: 1px solid #888; width: 80%; max-width: 500px;
-    border-radius: 8px; position: relative;
-}
-.close-button {
-    color: #aaa; float: right; font-size: 28px; font-weight: bold;
-    position: absolute; top: 10px; right: 20px;
-}
-.close-button:hover, .close-button:focus {
-    color: black; text-decoration: none; cursor: pointer;
-}
+
+/* Styles untuk halaman admin yang sudah ada (jika perlu) */
+nav { background-color: #0056b3; padding: 1rem; display: flex; justify-content: center; gap: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+nav a { color: white; text-decoration: none; font-weight: bold; padding: 8px 15px; border-radius: 5px; transition: background-color 0.3s; }
+nav a:hover, .nav-active { background-color: #007bff; }
+.main-content { padding: 20px; }
