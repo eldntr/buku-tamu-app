@@ -1,27 +1,25 @@
+// =================================================================
+//                 FILE: server.js (KODE LENGKAP)
+// =================================================================
+
 const express = require('express');
-const session = require('express-session'); // Import express-session
 const path = require('path');
 const xlsx = require('xlsx');
+const jwt = require('jsonwebtoken'); // Menggunakan JSON Web Token
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// === KONFIGURASI SESI ===
-app.use(session({
-    secret: 'ini-adalah-rahasia-yang-sangat-aman-12345', // Ganti dengan secret acak yang kuat
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } // Di production (HTTPS), set ke true
-}));
+// Middleware bawaan Express
+app.use(express.json()); // Untuk mem-parsing body JSON dari request
+app.use(express.static('public')); // Untuk menyajikan file statis (HTML, CSS, JS client)
 
-// Middleware
-app.use(express.json());
-app.use(express.static('public'));
-
-// Data Akun Admin (Hardcoded)
+// --- Konfigurasi Otentikasi ---
 const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'anil1234';
+const JWT_SECRET = 'kunci-rahasia-jwt-yang-lebih-baik-dan-panjang-untuk-keamanan'; // Ganti dengan secret acak Anda
 
-// Data Tamu (database in-memory) - tidak berubah
+// --- Database In-Memory ---
 let guests = [
   { id: 1, name: 'Budi Santoso', organization: 'Masyarakat Umum', destination: 'Kepala Bagian Umum', purpose: 'Silaturahmi', phone: '081234567890', category: 'Pribadi', satisfactionRating: 5, createdAt: new Date('2025-06-25T10:00:00Z')},
   { id: 2, name: 'Citra Lestari', organization: 'PT Maju Jaya', destination: 'Divisi Pemasaran', purpose: 'Presentasi Produk', phone: '089876543210', category: 'Bisnis', satisfactionRating: 4, createdAt: new Date('2025-06-26T14:30:00Z')},
@@ -29,102 +27,144 @@ let guests = [
 ];
 let currentId = 4;
 
-// === MIDDLEWARE OTENTIKASI ADMIN ===
+
+// === Middleware untuk Verifikasi Token JWT ===
 const isAdminAuthenticated = (req, res, next) => {
-    if (req.session.isAdmin) {
-        next(); // Jika sudah login, lanjutkan
-    } else {
-        res.status(401).json({ error: 'Akses ditolak. Silakan login.' });
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Format: "Bearer <TOKEN>"
+
+    if (token == null) {
+        // 401 Unauthorized: Tidak ada token
+        return res.status(401).json({ error: 'Akses ditolak. Token tidak ditemukan.' });
     }
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            // 403 Forbidden: Token tidak valid atau kedaluwarsa
+            return res.status(403).json({ error: 'Token tidak valid.' });
+        }
+        req.user = user;
+        next(); // Lanjutkan ke endpoint jika token valid
+    });
 };
 
-// === API ENDPOINTS OTENTIKASI ===
 
-// POST /api/auth/login
+// =================================================================
+//                    ENDPOINT API (RUTE APLIKASI)
+// =================================================================
+
+// --- 1. Rute Otentikasi ---
 app.post('/api/auth/login', (req, res) => {
     const { username, password } = req.body;
     if (username === ADMIN_USER && password === ADMIN_PASS) {
-        req.session.isAdmin = true; // Set flag admin di sesi
-        res.json({ success: true, message: 'Login berhasil' });
+        // Jika kredensial cocok, buat token JWT
+        const accessToken = jwt.sign(
+            { username: username, isAdmin: true },
+            JWT_SECRET,
+            { expiresIn: '1d' } // Token berlaku selama 1 hari
+        );
+        res.json({ success: true, accessToken: accessToken });
     } else {
-        res.status(401).json({ success: false, message: 'Username atau password salah' });
+        res.status(401).json({ success: false, message: 'Username atau password salah.' });
     }
 });
 
-// POST /api/auth/logout
-app.post('/api/auth/logout', (req, res) => {
-    req.session.destroy(err => {
-        if (err) {
-            return res.status(500).json({ error: 'Gagal logout' });
-        }
-        res.clearCookie('connect.sid'); // Hapus cookie sesi
-        res.json({ success: true, message: 'Logout berhasil' });
-    });
-});
-
-// GET /api/auth/status - Untuk memeriksa status login dari frontend
-app.get('/api/auth/status', isAdminAuthenticated, (req, res) => {
-    // Jika middleware lolos, berarti admin sudah login
-    res.json({ isAdmin: true });
-});
-
-// === API ENDPOINTS PUBLIK (Tidak Perlu Login) ===
-
-// POST /api/guests - Siapa saja bisa mengisi buku tamu
+// --- 2. Rute Publik (Bisa diakses tanpa login) ---
 app.post('/api/guests', (req, res) => {
     const { name, organization, destination, purpose, phone, category, satisfactionRating } = req.body;
-    const newGuest = { id: currentId++, name: name || '', organization: organization || '', destination: destination || '', purpose: purpose || '', phone: phone || '', category: category || '', satisfactionRating: satisfactionRating ? parseInt(satisfactionRating, 10) : null, createdAt: new Date() };
+    const newGuest = {
+        id: currentId++,
+        name: name || '',
+        organization: organization || '',
+        destination: destination || '',
+        purpose: purpose || '',
+        phone: phone || '',
+        category: category || '',
+        satisfactionRating: satisfactionRating ? parseInt(satisfactionRating, 10) : null,
+        createdAt: new Date()
+    };
     guests.push(newGuest);
     res.status(201).json(newGuest);
 });
 
-
-// === API ENDPOINTS KHUSUS ADMIN (Perlu Login) ===
-
-// Terapkan middleware 'isAdminAuthenticated' ke semua rute admin
+// --- 3. Rute Khusus Admin (Wajib menggunakan token JWT) ---
 const adminApiRouter = express.Router();
-adminApiRouter.use(isAdminAuthenticated);
+adminApiRouter.use(isAdminAuthenticated); // Terapkan middleware ke semua rute di bawah ini
 
-// READ all guests
+// GET semua tamu
 adminApiRouter.get('/guests', (req, res) => {
-  res.json([...guests].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)));
+    const sortedGuests = [...guests].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    res.json(sortedGuests);
 });
-// READ single guest
+
+// GET satu tamu berdasarkan ID
 adminApiRouter.get('/guests/:id', (req, res) => {
     const guest = guests.find(g => g.id === parseInt(req.params.id));
-    if (guest) res.json(guest); else res.status(404).json({ error: 'Tamu tidak ditemukan' });
+    if (guest) {
+        res.json(guest);
+    } else {
+        res.status(404).json({ error: 'Tamu tidak ditemukan' });
+    }
 });
-// UPDATE guest
+
+// PUT (Update) data tamu
 adminApiRouter.put('/guests/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    const guestIndex = guests.findIndex(g => g.id === id);
-    if (guestIndex === -1) return res.status(404).json({ error: 'Tamu tidak ditemukan' });
-    const { name, organization, destination, purpose, phone, category, satisfactionRating } = req.body;
-    guests[guestIndex] = { ...guests[guestIndex], name, organization, destination, purpose, phone, category, satisfactionRating: satisfactionRating ? parseInt(satisfactionRating, 10) : guests[guestIndex].satisfactionRating };
+    const guestIndex = guests.findIndex(g => g.id === parseInt(req.params.id));
+    if (guestIndex === -1) {
+        return res.status(404).json({ error: 'Tamu tidak ditemukan' });
+    }
+    const updatedData = req.body;
+    guests[guestIndex] = { ...guests[guestIndex], ...updatedData };
     res.json(guests[guestIndex]);
 });
-// DELETE guest
+
+// DELETE data tamu
 adminApiRouter.delete('/guests/:id', (req, res) => {
-    const id = parseInt(req.params.id);
     const initialLength = guests.length;
-    guests = guests.filter(g => g.id !== id);
-    if (guests.length === initialLength) return res.status(404).json({ error: 'Tamu tidak ditemukan' });
+    guests = guests.filter(g => g.id !== parseInt(req.params.id));
+    if (initialLength === guests.length) {
+        return res.status(404).json({ error: 'Tamu tidak ditemukan' });
+    }
     res.status(204).send();
 });
-// STATS summary
+
+// GET statistik ringkasan
 adminApiRouter.get('/stats/summary', (req, res) => {
-    const visitsPerDay = guests.reduce((acc, guest) => { const date = new Date(guest.createdAt).toISOString().split('T')[0]; acc[date] = (acc[date] || 0) + 1; return acc; }, {});
-    const sortedVisits = Object.entries(visitsPerDay).sort((a, b) => new Date(a[0]) - new Date(b[0])).reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
+    const visitsPerDay = guests.reduce((acc, guest) => {
+        const date = new Date(guest.createdAt).toISOString().split('T')[0];
+        acc[date] = (acc[date] || 0) + 1;
+        return acc;
+    }, {});
+    const sortedVisits = Object.entries(visitsPerDay)
+      .sort((a, b) => new Date(a[0]) - new Date(b[0]))
+      .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
     res.json({ totalGuests: guests.length, visitsOverTime: sortedVisits });
 });
-// STATS satisfaction
+
+// GET statistik kepuasan
 adminApiRouter.get('/stats/satisfaction', (req, res) => {
-    const satisfactionCounts = guests.reduce((acc, guest) => { if (guest.satisfactionRating) { const rating = guest.satisfactionRating; acc[rating] = (acc[rating] || 0) + 1; } return acc; }, {});
+    const satisfactionCounts = guests.reduce((acc, guest) => {
+        if (guest.satisfactionRating) {
+            const rating = guest.satisfactionRating;
+            acc[rating] = (acc[rating] || 0) + 1;
+        }
+        return acc;
+    }, {});
     res.json(satisfactionCounts);
 });
-// REPORT excel
+
+// GET laporan Excel
 adminApiRouter.get('/report/excel', (req, res) => {
-    const reportData = guests.map(g => ({ 'Nama': g.name, 'Instansi/Organisasi': g.organization, 'Kategori': g.category, 'Tujuan (Bertemu)': g.destination, 'Keperluan': g.purpose, 'No. Telepon': g.phone, 'Rating Kepuasan': g.satisfactionRating, 'Tanggal Kunjungan': new Date(g.createdAt).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' }) }));
+    const reportData = guests.map(g => ({
+        'Nama': g.name,
+        'Instansi/Organisasi': g.organization,
+        'Kategori': g.category,
+        'Tujuan (Bertemu)': g.destination,
+        'Keperluan': g.purpose,
+        'No. Telepon': g.phone,
+        'Rating Kepuasan': g.satisfactionRating,
+        'Tanggal Kunjungan': new Date(g.createdAt).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
+    }));
     const worksheet = xlsx.utils.json_to_sheet(reportData);
     const workbook = xlsx.utils.book_new();
     xlsx.utils.book_append_sheet(workbook, worksheet, "Laporan Kunjungan");
@@ -134,4 +174,13 @@ adminApiRouter.get('/report/excel', (req, res) => {
     res.send(buffer);
 });
 
-// Gunakan router admin untuk semua endpoint yang dimulai dengan /api/
+// Terapkan router admin ke path /api/admin
+app.use('/api/admin', adminApiRouter);
+
+
+// =================================================================
+//                      MENJALANKAN SERVER
+// =================================================================
+app.listen(PORT, () => {
+  console.log(`Server berhasil berjalan di http://localhost:${PORT}`);
+});

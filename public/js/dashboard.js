@@ -2,8 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalGuestsEl = document.getElementById('total-guests');
     const ctx = document.getElementById('visitsChart').getContext('2d');
 
-    fetch('/api/admin/stats/summary')
-        .then(response => response.json())
+    fetchAdminAPI('/api/admin/stats/summary')
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
         .then(data => {
             // Tampilkan total tamu
             totalGuestsEl.textContent = data.totalGuests;
@@ -40,5 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         })
-        .catch(error => console.error('Error fetching dashboard stats:', error));
+        .catch(error => {
+            // Error 'Akses ditolak' sudah ditangani di helper,
+            // jadi kita hanya perlu menangani error lain di sini.
+            if (error.message !== 'Akses ditolak') {
+                 console.error('Error fetching dashboard stats:', error);
+            }
+        });
 });

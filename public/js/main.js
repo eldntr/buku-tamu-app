@@ -14,18 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             // === TAMBAHKAN BLOK KODE INI ===
+            // ... (di dalam file main.js, setelah memuat navbar)
             const logoutBtn = document.getElementById('logout-btn');
             if(logoutBtn) {
-                logoutBtn.addEventListener('click', async (e) => {
+                logoutBtn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    try {
-                        const response = await fetch('/api/auth/logout', { method: 'POST' });
-                        if (response.ok) {
-                            window.location.href = '/login.html'; // Redirect ke login setelah logout
-                        }
-                    } catch (error) {
-                        console.error('Logout failed:', error);
-                    }
+                    // Hapus token dari localStorage
+                    localStorage.removeItem('authToken');
+                    // Redirect ke halaman login
+                    window.location.href = '/login.html';
                 });
             }
             // === AKHIR BLOK KODE TAMBAHAN ===

@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan - Sistem Buku Tamu</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="js/auth-check.js"></script>
 </head>
 <body>
     <div class="main-content">
         <h1>Laporan Kunjungan</h1>
-        <p>Klik tombol di bawah ini untuk mengunduh seluruh data kunjungan dalam format Excel.</p>
-        <a href="/api/admin/report/excel" download="laporan_kunjungan.xlsx">
-            <button>Unduh Laporan Excel</button>
-        </a>
+        <p>Klik tombol di bawah ini untuk mengunduh seluruh data kunjungan dalam format file Excel (.xlsx).</p>
+        <button id="download-report-btn">Unduh Laporan Excel</button>
+        <p id="download-status" style="margin-top: 15px;"></p>
     </div>
-    <script src="js/main.js"></script>
+    
+    <script src="js/api-helper.js"></script> <script src="js/main.js"></script>
+    <script src="js/laporan.js"></script>
 </body>
 </html>

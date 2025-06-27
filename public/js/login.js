@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        errorMessage.textContent = ''; // Kosongkan pesan error
+        errorMessage.textContent = '';
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
@@ -15,12 +15,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
+            
+            const data = await response.json();
 
             if (response.ok) {
-                // Jika login sukses, alihkan ke dashboard admin
+                // Simpan token ke localStorage
+                localStorage.setItem('authToken', data.accessToken);
+                // Redirect ke dashboard
                 window.location.href = '/index.html';
             } else {
-                const data = await response.json();
                 errorMessage.textContent = data.message || 'Login gagal.';
             }
         } catch (error) {

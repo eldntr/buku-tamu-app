@@ -4,39 +4,36 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeButton = document.querySelector('.close-button');
     const editForm = document.getElementById('editForm');
 
-    // Fungsi untuk mengambil dan menampilkan semua tamu di tabel
     const fetchAndDisplayGuests = async () => {
         try {
-            const response = await fetch('/api/guests');
+            const response = await fetchAdminAPI('/api/admin/guests');
             const guests = await response.json();
             
-            tableBody.innerHTML = ''; // Kosongkan tabel sebelum diisi
+            tableBody.innerHTML = '';
             guests.forEach(guest => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${guest.name}</td>
-                    <td>${guest.organization}</td>
-                    <td>${guest.destination}</td>
+                    <td>${guest.name || '-'}</td>
+                    <td>${guest.organization || '-'}</td>
+                    <td>${guest.destination || '-'}</td>
                     <td>${new Date(guest.createdAt).toLocaleDateString('id-ID')}</td>
                     <td class="actions">
                         <button class="edit-btn" data-id="${guest.id}">Edit</button>
-                        <button class="delete-btn" data-id="${guest.id}">Delete</button>
+                        <button class="delete-btn" data-id="${guest.id}">Hapus</button>
                     </td>
                 `;
                 tableBody.appendChild(row);
             });
         } catch (error) {
-            console.error('Error fetching guests:', error);
+            console.error('Gagal memuat data tamu:', error);
         }
     };
 
-    // Fungsi untuk membuka modal dan mengisi data untuk edit
     const openEditModal = async (id) => {
         try {
-            const response = await fetch(`/api/guests/${id}`);
+            const response = await fetchAdminAPI(`/api/admin/guests/${id}`);
             const guest = await response.json();
 
-            // Isi form di dalam modal
             document.getElementById('edit-guestId').value = guest.id;
             document.getElementById('edit-name').value = guest.name;
             document.getElementById('edit-organization').value = guest.organization;
@@ -48,39 +45,31 @@ document.addEventListener("DOMContentLoaded", () => {
             
             modal.style.display = 'block';
         } catch (error) {
-            console.error('Error fetching guest data for edit:', error);
+            console.error('Gagal mengambil data untuk edit:', error);
         }
     };
 
-    // Fungsi untuk menghapus tamu
     const deleteGuest = async (id) => {
         if (!confirm('Apakah Anda yakin ingin menghapus data ini?')) return;
         
         try {
-            const response = await fetch(`/api/guests/${id}`, { method: 'DELETE' });
-            if (response.ok) {
-                fetchAndDisplayGuests(); // Refresh tabel
-            } else {
-                alert('Gagal menghapus data.');
-            }
+            await fetchAdminAPI(`/api/admin/guests/${id}`, { method: 'DELETE' });
+            fetchAndDisplayGuests();
         } catch (error) {
-            console.error('Error deleting guest:', error);
+            console.error('Gagal menghapus data:', error);
+            alert('Gagal menghapus data.');
         }
     };
 
-    // Event listener untuk tombol di dalam tabel (Edit & Delete)
     tableBody.addEventListener('click', (e) => {
         if (e.target.classList.contains('edit-btn')) {
-            const id = e.target.dataset.id;
-            openEditModal(id);
+            openEditModal(e.target.dataset.id);
         }
         if (e.target.classList.contains('delete-btn')) {
-            const id = e.target.dataset.id;
-            deleteGuest(id);
+            deleteGuest(e.target.dataset.id);
         }
     });
 
-    // Event listener untuk form edit saat disubmit
     editForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = document.getElementById('edit-guestId').value;
@@ -95,23 +84,18 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch(`/api/guests/${id}`, {
+            await fetchAdminAPI(`/api/admin/guests/${id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(updatedData)
             });
-            if (response.ok) {
-                modal.style.display = 'none';
-                fetchAndDisplayGuests(); // Refresh tabel
-            } else {
-                alert('Gagal menyimpan perubahan.');
-            }
+            modal.style.display = 'none';
+            fetchAndDisplayGuests();
         } catch (error) {
-            console.error('Error updating guest:', error);
+            console.error('Gagal menyimpan perubahan:', error);
+            alert('Gagal menyimpan perubahan.');
         }
     });
 
-    // Tutup modal
     closeButton.onclick = () => modal.style.display = 'none';
     window.onclick = (event) => {
         if (event.target == modal) {
@@ -119,6 +103,5 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // Panggil fungsi utama saat halaman dimuat
     fetchAndDisplayGuests();
 });
