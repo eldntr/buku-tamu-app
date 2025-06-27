@@ -3,25 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Sistem Buku Tamu</title>
+    <title>Selamat Datang di Sistem Buku Tamu</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="js/auth-check.js"></script>
+    <style>
+        .landing-container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .landing-container h1 {
+            font-size: 2.5rem;
+            color: #0056b3;
+        }
+        .landing-container p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;
+        }
+        .action-buttons a {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+        }
+        .action-buttons a.admin-login {
+            background-color: #6c757d;
+        }
+        .action-buttons a:hover {
+            background-color: #0056b3;
+        }
+        .action-buttons a.admin-login:hover {
+            background-color: #5a6268;
+        }
+    </style>
 </head>
 <body>
     <div class="main-content">
-        <h1>Dashboard</h1>
-        <div class="stats-card">
-            <h3>Total Kunjungan</h3>
-            <p id="total-guests">0</p>
-        </div>
-        
-        <h2>Grafik Kunjungan Harian</h2>
-        <div class="chart-container">
-            <canvas id="visitsChart"></canvas>
+        <div class="landing-container">
+            <h1>Selamat Datang</h1>
+            <p>Sistem pencatatan tamu digital modern dan efisien.</p>
+            <div class="action-buttons">
+                <a href="buku-tamu.html">Isi Buku Tamu</a>
+                <a href="login.html" class="admin-login">Login Admin</a>
+            </div>
         </div>
     </div>
-    <script src="js/main.js"></script>
-    <script src="js/dashboard.js"></script>
 </body>
 </html>
