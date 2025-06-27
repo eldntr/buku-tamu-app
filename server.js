@@ -20,12 +20,8 @@ const ADMIN_PASS = 'anil1234';
 const JWT_SECRET = 'kunci-rahasia-jwt-yang-lebih-baik-dan-panjang-untuk-keamanan'; // Ganti dengan secret acak Anda
 
 // --- Database In-Memory ---
-let guests = [
-  { id: 1, name: 'Budi Santoso', organization: 'Masyarakat Umum', destination: 'Kepala Bagian Umum', purpose: 'Silaturahmi', phone: '081234567890', category: 'Pribadi', satisfactionRating: 5, createdAt: new Date('2025-06-25T10:00:00Z')},
-  { id: 2, name: 'Citra Lestari', organization: 'PT Maju Jaya', destination: 'Divisi Pemasaran', purpose: 'Presentasi Produk', phone: '089876543210', category: 'Bisnis', satisfactionRating: 4, createdAt: new Date('2025-06-26T14:30:00Z')},
-  { id: 3, name: 'Agus Setiawan', organization: 'Kementerian Komunikasi', destination: 'Sekretariat', purpose: 'Koordinasi', phone: '08111222333', category: 'Pemerintahan', satisfactionRating: 5, createdAt: new Date('2025-06-26T11:00:00Z')},
-];
-let currentId = 4;
+let guests = []; // Kosongkan array untuk menghapus semua data dummy
+let currentId = 1; // Atur ulang ID pertama menjadi 1
 
 
 // === Middleware untuk Verifikasi Token JWT ===
