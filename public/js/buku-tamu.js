@@ -1,15 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     const guestForm = document.getElementById('guestForm');
-    const guestList = document.getElementById('guestList');
-    
-    // Fungsi untuk menampilkan 5 tamu terakhir saat halaman dimuat
-    const fetchGuests = () => {
-        // Endpoint untuk mengambil tamu tidak perlu otentikasi jika kita ingin menampilkannya ke publik
-        // Namun, jika endpoint ini sekarang diamankan, panggilannya harus diubah/dihapus.
-        // Untuk amannya, kita bisa hapus fitur ini dari halaman publik.
-        // Mari kita biarkan kosong untuk saat ini agar tidak memanggil API admin.
-        guestList.innerHTML = '<p><em>Daftar kunjungan hanya dapat dilihat oleh admin.</em></p>';
-    };
 
     // Event handler untuk submit form
     guestForm.addEventListener('submit', (e) => {
@@ -34,19 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         })
         .then(response => {
             if (!response.ok) {
-                // Jika server mengembalikan error, coba baca pesannya
                 return response.json().then(err => { throw new Error(err.error || 'Gagal menambahkan tamu') });
             }
             return response.json();
         })
         .then(data => {
-            // Tampilkan pesan konfirmasi
             alert(`Terima kasih, ${data.name || 'Tamu'}! Data Anda telah berhasil disimpan.`);
-            
-            // ======================================================
-            // PERUBAHAN UTAMA: Arahkan ke halaman utama (index.html)
-            // ======================================================
-            window.location.href = '/index.html';
+            window.location.href = '/index.html'; // Arahkan ke halaman utama
         })
         .catch(error => {
             console.error('Error:', error);
@@ -54,6 +38,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Panggil saat halaman dimuat
-    fetchGuests();
+    // Tidak ada lagi yang perlu dijalankan saat halaman dimuat
 });
